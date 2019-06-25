@@ -1,0 +1,128 @@
+CTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>repl.it</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdn.jsdelivr.net/npm/vue">
+
+	</script>
+
+	<!-- UIkit CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit.min.css" />
+
+	<!-- UIkit JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit.min.js">
+
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit-icons.min.js">
+
+	</script>
+</head>
+
+<body class="uk-background-muted" uk-height-viewport="expand: true">
+	<div id='app' class="uk-container uk-container-xsmall  uk-background-default" uk-height-viewport="expand: true" style="background-color:limegreen;">
+		<h1 class="uk-text-center uk-light uk-margin-top">{{ message }}</h1>
+		<hr class="uk-divider-icon">
+
+		<input type="text" v-model="todo" placeholder="Enter for Adding !!" class="uk-width-expand uk-form-large" v-on:keyup.enter="addTodo"/>
+
+      <ul id="listVuewing" class="uk-width-expand uk-background-default uk-margin-remove-left uk-margin-remove-bottom" uk-tab>
+        <li class="uk-active uk-padding-remove-left" @click="changeTab(0)">
+          <a href="#" >ALL</a>
+        </li>
+        <li class="" @click="changeTab(1)">
+          <a href="#">Active</a>
+        </li>
+        <li class="" @click="changeTab(2)">
+          <a href="#">Complete</a>
+        </li>
+      </ul>
+
+<!-- all list showing -->
+      <div id="allList" v-show="activeTab == 0" class="uk-width-expand uk-list uk-list-large">
+          <div v-for="item in list" class="uk-card uk-card-default uk-card-hover uk-margin-remove-bottom">
+            <input type="checkbox" v-model="item.checked" class="uk-checkbox uk-child-width-auto"/>
+             {{ item.todo }}
+          </div>
+      </div>
+<!-- active list showing -->
+      <div id="activeList" v-show="activeTab == 1" class="uk-width-expand uk-list uk-list-xlarge">
+          <div v-for="item in list" class="uk-card uk-card-default uk-card-hover uk-margin-remove-bottom">
+            <div v-show="item.checked == false">
+                <input type="checkbox" v-model="item.checked" class="uk-checkbox uk-child-width-auto"/>
+              <label class="uk-child-width-1-2">
+                  {{ item.todo }}
+              </label>
+            </div>
+          </div>
+      </div>
+<!-- complete list showing -->
+      <div id="completeList" v-show="activeTab == 2" class="uk-width-expand uk-list uk-list-large">
+          <div v-for="item in list" class="uk-card uk-card-default uk-card-hover uk-margin-remove-bottom">
+            <div v-show="item.checked == true" class="">
+                <input type="checkbox" v-model="item.checked" class="uk-checkbox uk-child-width-auto"/>
+                {{ item.todo }}
+            </div>
+          </div>
+      </div>
+
+      <!-- This is the modal -->
+      <div id="my-id" uk-modal>
+          <div class="uk-modal-dialog uk-modal-body">
+              <h2 class="uk-modal-title"></h2>
+              <div id="modalBody" v-model="modelContent"></div>
+              <button class="uk-modal-close" type="button" class="" uk-close></button>
+          </div>
+      </div>
+
+      <button type="button" class="uk-button uk-button-danger uk-width-1-1 uk-margin-large-top" @click="allTodosDelet">
+        All Delete !!
+      </button>
+    </div><!-- app body ended -->
+
+    <script>
+        let app = new Vue({
+          el: "#app",
+          data: {
+            message: "Welcom !!",
+            id: 0,
+            todo: "",
+            activeTab: 0,
+            showModal: false,
+            modelContent: "",
+            list: [
+              {id:this.id ,todo:"Basketball" ,checked:true ,detail:""},
+              {id:this.id++ ,todo:"Shopping" ,checked:false ,detail:""}
+              ]
+          },
+          methods: {
+            addTodo() {
+              let item = {
+                id: this.id++ ,
+                todo: this.todo ,
+                checked: false
+              }
+              this.list.push(item);
+              this.todo = "";
+            },
+            changeTab(tabNumber) {
+              this.activeTab = tabNumber;
+            },
+            pushModal(content) {
+              this.modalContent = content;
+            },
+            allTodosDelet() {
+              if(confirm("Caution!! Really delete all article")) {
+                this.list.splice(0 ,this.list.length);
+              }
+            }
+          }
+        })
+        
+    </script>
+  </body>
+</html>
+
